@@ -1,17 +1,21 @@
 import { CustomerOrder } from "./interfaces/customer-protocol";
+import { MessagingProtocol } from "./interfaces/messaging-protocol";
 import { OrderStatus } from "./interfaces/order-status";
-import { Messaging } from "./services/messaging";
-import { Persistency } from "./services/persistency";
-import { ShoppingCart } from "./shopping-cart";
+import { PersistencyProtocol } from "./interfaces/persistency-protocol";
+import { ShoppingCartProtocol } from "./interfaces/shopping-cart-protocol";
 
+// Order alto nível por depende da ShoppingCart
+// Order alto nível - ShoppingCart baixo nível
+// Order não sabe fazer as tarefas de ShoppingCart
+// Aclopamento - não funciona sem as dependências
 export class Order {
   private _orderStatus: OrderStatus = "open";
 
   constructor(
-    private readonly cart: ShoppingCart,
-    private readonly messaging: Messaging,
-    private readonly persistency: Persistency,
-    private readonly customer: CustomerOrder
+    private readonly cart: ShoppingCartProtocol,
+    private readonly messaging: MessagingProtocol,
+    private readonly persistency: PersistencyProtocol,
+    private readonly customer: CustomerOrder // Depende de uma abstração - Alto nível
   ) {}
 
   get orderStatus(): OrderStatus {
